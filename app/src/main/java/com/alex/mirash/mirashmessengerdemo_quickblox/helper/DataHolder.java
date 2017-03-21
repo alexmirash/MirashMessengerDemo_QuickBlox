@@ -1,4 +1,4 @@
-package com.alex.mirash.mirashmessengerdemo_quickblox.login.helper;
+package com.alex.mirash.mirashmessengerdemo_quickblox.helper;
 
 import com.quickblox.users.model.QBUser;
 

@@ -4,12 +4,13 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.ActionProvider;
-import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.UserDataHolder;
+import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.LoginUserDataHolder;
 
 
 /**
@@ -22,6 +23,7 @@ public abstract class SignBaseView extends FrameLayout {
     protected EditText passwordEditText;
 
     protected View switchButton;
+    protected Button doneButton;
 
     protected ActionProvider actionProvider;
 
@@ -34,6 +36,15 @@ public abstract class SignBaseView extends FrameLayout {
         inflate(getContext(), getLayoutId(), this);
         loginEditText = (EditText) findViewById(R.id.login_in_edittext);
         passwordEditText = (EditText) findViewById(R.id.password_edittext);
+        doneButton = (Button) findViewById(R.id.login_done_button);
+        doneButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (actionProvider != null) {
+                    actionProvider.onDone(getUserData());
+                }
+            }
+        });
 
         switchButton = findViewById(R.id.login_switch_button);
         switchButton.setOnClickListener(new OnClickListener() {
@@ -64,7 +75,7 @@ public abstract class SignBaseView extends FrameLayout {
         this.actionProvider = actionProvider;
     }
 
-    public UserDataHolder getUserData() {
-        return new UserDataHolder(loginEditText.getText().toString(), passwordEditText.getEditableText().toString());
+    public LoginUserDataHolder getUserData() {
+        return new LoginUserDataHolder(loginEditText.getText().toString(), passwordEditText.getEditableText().toString());
     }
 }

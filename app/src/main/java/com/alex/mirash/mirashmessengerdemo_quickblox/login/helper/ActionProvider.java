@@ -5,7 +5,7 @@ package com.alex.mirash.mirashmessengerdemo_quickblox.login.helper;
  */
 
 public interface ActionProvider {
-    void onDone(UserDataHolder userData);
+    void onDone(LoginUserDataHolder userData);
 
     void onSwitch();
 }

@@ -2,6 +2,7 @@ package com.quickblox.sample.core.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import java.lang.reflect.Field;
 
 public class CoreBaseActivity extends AppCompatActivity {
     protected ActionBar actionBar;
+
+    protected Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +62,22 @@ public class CoreBaseActivity extends AppCompatActivity {
     }
 
     protected void showSnackbarError(View rootLayout, @StringRes int resId, QBResponseException e, View.OnClickListener clickListener) {
-        ErrorUtils.showSnackbar(rootLayout, resId, e, R.string.dlg_retry, clickListener);
+        snackbar = ErrorUtils.showSnackbar(rootLayout, resId, e, R.string.dlg_retry, clickListener);
+        snackbar.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSnackbar();
+            }
+        });
+    }
+
+    protected boolean hideSnackbar() {
+        if (snackbar != null) {
+            snackbar.dismiss();
+            snackbar = null;
+            return true;
+        }
+        return false;
     }
 
     @Override

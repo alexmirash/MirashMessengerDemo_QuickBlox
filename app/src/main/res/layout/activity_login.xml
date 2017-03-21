@@ -6,31 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.alex.mirash.mirashmessengerdemo_quickblox.LauncherActivity"
+    android:paddingBottom="90dp"
     >
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/login_bottom_section"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/margin_large"
         android:orientation="vertical"
         >
-        <Button
-            android:id="@+id/login_done_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="@dimen/margin_middle"
-            android:text="Test acc"
-            android:textSize="20sp"
-            />
         <TextView
+            android:id="@+id/login_test_account_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="@dimen/margin_middle"
             android:text="Try with test account"
             android:textSize="18sp"
             />
-    </LinearLayout>
+    </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

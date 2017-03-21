@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
-import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.UserDataHolder;
+import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.LoginUserDataHolder;
 
 /**
  * @author Mirash
@@ -31,7 +31,7 @@ public class SignUpView extends SignBaseView {
         return R.layout.view_sign_up;
     }
 
-    public boolean checkData(UserDataHolder userData) {
+    public boolean checkData(LoginUserDataHolder userData) {
         String login = userData.getLogin();
         String password = userData.getPassword();
         String confirm = userData.getConfirmPassword();
@@ -54,5 +54,12 @@ public class SignUpView extends SignBaseView {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public LoginUserDataHolder getUserData() {
+        return new LoginUserDataHolder(loginEditText.getText().toString(),
+                passwordEditText.getEditableText().toString(),
+                confirmPasswordEditText.getEditableText().toString());
     }
 }

@@ -2,13 +2,12 @@ package com.alex.mirash.mirashmessengerdemo_quickblox.login;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
 import com.alex.mirash.mirashmessengerdemo_quickblox.base.BaseActivity;
+import com.alex.mirash.mirashmessengerdemo_quickblox.helper.DataHolder;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.ActionProvider;
-import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.DataHolder;
-import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.UserDataHolder;
+import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.LoginUserDataHolder;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.view.SignInView;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.view.SignUpView;
 import com.quickblox.core.QBEntityCallback;
@@ -25,8 +24,8 @@ public class LoginActivity extends BaseActivity {
 
     private SignInView signInView;
     private SignUpView signUpView;
-    private Button doneButton;
 
+    private View testAccountLoginView;
 
     private Mode mode = Mode.LOGIN;
 
@@ -37,9 +36,17 @@ public class LoginActivity extends BaseActivity {
         signInView = _findViewById(R.id.sign_in_view);
         signUpView = _findViewById(R.id.sign_up_view);
 
+        testAccountLoginView = findViewById(R.id.login_test_account_button);
+        testAccountLoginView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn(new LoginUserDataHolder("TestUser", "qwerty123"));
+            }
+        });
+
         signInView.setActionProvider(new ActionProvider() {
             @Override
-            public void onDone(UserDataHolder userData) {
+            public void onDone(LoginUserDataHolder userData) {
                 signIn(userData);
             }
 
@@ -51,7 +58,7 @@ public class LoginActivity extends BaseActivity {
         });
         signUpView.setActionProvider(new ActionProvider() {
             @Override
-            public void onDone(UserDataHolder userData) {
+            public void onDone(LoginUserDataHolder userData) {
                 signUp(userData);
             }
 
@@ -60,20 +67,9 @@ public class LoginActivity extends BaseActivity {
                 showSignInView();
             }
         });
-
-        doneButton = _findViewById(R.id.login_done_button);
-
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mode == Mode.LOGIN) {
-                    signIn(signInView.getUserData());
-                }
-            }
-        });
     }
 
-    public void signIn(final UserDataHolder userData) {
+    public void signIn(final LoginUserDataHolder userData) {
         showProgressDialog();
         QBUser qbUser = new QBUser(userData.getLogin(), userData.getPassword());
         QBUsers.signIn(qbUser).performAsync(new QBEntityCallback<QBUser>() {
@@ -82,7 +78,6 @@ public class LoginActivity extends BaseActivity {
                 dismissProgressDialog();
                 DataHolder.getInstance().setSignInQbUser(qbUser);
                 Toaster.longToast(R.string.user_successfully_sign_in);
-                finish();
             }
 
             @Override
@@ -99,7 +94,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    public void signUp(final UserDataHolder userData) {
+    public void signUp(final LoginUserDataHolder userData) {
         if (signUpView.checkData(userData)) {
             return;
         }
@@ -134,19 +129,25 @@ public class LoginActivity extends BaseActivity {
     public void showSignUpView() {
         signInView.hide();
         signUpView.show();
-        doneButton.setText("REGISTER");
 
     }
 
     public void showSignInView() {
         signUpView.hide();
         signInView.show();
-        doneButton.setText("LOG IN");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (hideSnackbar()) {
+            return;
+        }
+        super.onBackPressed();
     }
 
     private enum Mode {

@@ -1,6 +1,5 @@
 package com.alex.mirash.mirashmessengerdemo_quickblox.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,7 +8,7 @@ import android.view.MenuItem;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
 import com.alex.mirash.mirashmessengerdemo_quickblox.base.BaseActivity;
-import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.DataHolder;
+import com.alex.mirash.mirashmessengerdemo_quickblox.helper.DataHolder;
 import com.quickblox.core.QBEntityCallback;
 import com.quickblox.core.exception.QBResponseException;
 import com.quickblox.sample.core.utils.Toaster;

@@ -21,9 +21,19 @@
             android:textSize="20sp"
             />
     </FrameLayout>
+    <Button
+        android:id="@+id/login_done_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/login_switch_button"
+        android:text="Log in"
+        android:textSize="20sp"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/login_done_button"
         android:layout_toLeftOf="@id/login_switch_button"
         android:gravity="center"
         android:orientation="vertical"
@@ -53,8 +63,8 @@
             android:textColor="@color/black_light"
             android:textColorHint="@color/warm_gray_two"
             android:textSize="@dimen/text_size_large"
-            android:theme="@style/EditTextTheme"
             app:typeface="roboto_regular"
             />
     </LinearLayout>
+
 </RelativeLayout>
