@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.alex.mirash.mirashmessengerdemo_quickblox.LauncherActivity"
+    >
+    <LinearLayout
+        android:id="@+id/login_bottom_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:orientation="vertical"
+        >
+        <Button
+            android:id="@+id/login_done_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/margin_middle"
+            android:text="Test acc"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Try with test account"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/login_bottom_section"
+        >
+        <com.alex.mirash.mirashmessengerdemo_quickblox.login.view.SignInView
+            android:id="@+id/sign_in_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <com.alex.mirash.mirashmessengerdemo_quickblox.login.view.SignUpView
+            android:id="@+id/sign_up_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+</RelativeLayout>

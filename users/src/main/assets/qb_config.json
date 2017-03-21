@@ -1,0 +1,9 @@
+{
+  "app_id": "55090",
+  "auth_key": "ppAyNLmCk9E3C-s",
+  "auth_secret": "HH4JC6CdGWfO8Wm",
+  "account_key": "AC7GqoTrFsZfpmKmkG9q",
+
+  "api_domain": "https://api.quickblox.com",
+  "chat_domain": "chat.quickblox.com"
+}
