@@ -69,6 +69,27 @@ public class CoreBaseActivity extends AppCompatActivity {
                 hideSnackbar();
             }
         });
+        snackbar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                super.onDismissed(snackbar, event);
+                onSnackbarDismiss(snackbar, event);
+            }
+
+            @Override
+            public void onShown(Snackbar snackbar) {
+                super.onShown(snackbar);
+                onSnackbarShown(snackbar);
+            }
+        });
+    }
+
+    protected void onSnackbarDismiss(Snackbar snackbar, int event) {
+
+    }
+
+    protected void onSnackbarShown(Snackbar snackbar) {
+
     }
 
     protected boolean hideSnackbar() {

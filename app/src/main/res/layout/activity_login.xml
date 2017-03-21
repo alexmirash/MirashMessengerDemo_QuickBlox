@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.alex.mirash.mirashmessengerdemo_quickblox.LauncherActivity"
-    android:paddingBottom="90dp"
     >
     <FrameLayout
         android:id="@+id/login_bottom_section"

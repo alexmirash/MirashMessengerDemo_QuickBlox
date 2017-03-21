@@ -1,6 +1,7 @@
 package com.alex.mirash.mirashmessengerdemo_quickblox.login;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
@@ -27,12 +28,13 @@ public class LoginActivity extends BaseActivity {
 
     private View testAccountLoginView;
 
-    private Mode mode = Mode.LOGIN;
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        rootView = findViewById(R.id.activity_login_root);
         signInView = _findViewById(R.id.sign_in_view);
         signUpView = _findViewById(R.id.sign_up_view);
 
@@ -83,8 +85,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onError(QBResponseException errors) {
                 progressDialog.dismiss();
-                View rootLayout = findViewById(R.id.activity_login_root);
-                showSnackbarError(rootLayout, R.string.errors, errors, new View.OnClickListener() {
+                showSnackbarError(rootView, R.string.errors, errors, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         signIn(userData);
@@ -114,8 +115,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onError(QBResponseException error) {
                 progressDialog.dismiss();
-                View rootLayout = findViewById(R.id.activity_login_root);
-                showSnackbarError(rootLayout, R.string.errors, error, new View.OnClickListener() {
+                showSnackbarError(rootView, R.string.errors, error, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         signUp(userData);
@@ -150,8 +150,13 @@ public class LoginActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    private enum Mode {
-        LOGIN,
-        REGISTER
+    @Override
+    protected void onSnackbarDismiss(Snackbar snackbar, int event) {
+        rootView.animate().translationYBy(snackbar.getView().getHeight()).setDuration(100).start();
+    }
+
+    @Override
+    protected void onSnackbarShown(Snackbar snackbar) {
+        rootView.animate().translationYBy(-snackbar.getView().getHeight()).setDuration(100).start();
     }
 }
