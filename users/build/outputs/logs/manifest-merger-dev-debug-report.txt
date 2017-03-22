@@ -39,11 +39,11 @@ MERGED from [com.google.android.gms:play-services-iid:10.0.1] C:\Users\Mirash\.a
 MERGED from [com.google.android.gms:play-services-base:10.0.1] C:\Users\Mirash\.android\build-cache\9a50ccf5829a23fabe9a2a7ec13476219d224eba\output\AndroidManifest.xml:18:5-20:19
 MERGED from [com.google.android.gms:play-services-tasks:10.0.1] C:\Users\Mirash\.android\build-cache\09fc506b8615f95d909e2b07894a1ceb2fef8322\output\AndroidManifest.xml:4:5-19
 MERGED from [com.google.android.gms:play-services-basement:10.0.1] C:\Users\Mirash\.android\build-cache\46e33a7e9996585a80aa30ab6a3f67b39388428e\output\AndroidManifest.xml:19:5-21:19
-MERGED from [com.android.support:design:23.1.1] C:\Users\Mirash\.android\build-cache\1194fa7a58e3066514e1d07dd370129c13109a35\output\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:design:23.1.1] C:\Users\Mirash\.android\build-cache\2275cf7339603066bb432b1c1d75b9ebdd7820a7\output\AndroidManifest.xml:22:5-20
 MERGED from [com.github.johnkil.android-robototextview:robototextview:2.4.3] C:\Users\Mirash\.android\build-cache\29d46e85720512f33ab19ea2fcc8aa92308bad47\output\AndroidManifest.xml:8:5-20
-MERGED from [com.android.support:appcompat-v7:23.1.1] C:\Users\Mirash\.android\build-cache\b8dc71a7970436023081eff4ba84d1fed259e847\output\AndroidManifest.xml:22:5-20
+MERGED from [com.android.support:appcompat-v7:23.1.1] C:\Users\Mirash\.android\build-cache\590c050b1ba9bb064622a321bb18ffa977f46b6d\output\AndroidManifest.xml:22:5-20
 MERGED from [com.github.orangegangsters:swipy:1.2.2] C:\Users\Mirash\.android\build-cache\5349ab1be6bafec23a5d565494c1c0043a0804b0\output\AndroidManifest.xml:11:5-12:19
-MERGED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\d2ed8ea7cf16cf4b6069d96a6cb04d9ce87f9345\output\AndroidManifest.xml:25:5-20
+MERGED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\59f96ff75b559947429f94fcd358099b7449c799\output\AndroidManifest.xml:25:5-20
 	android:label
 		ADDED from C:\Users\Mirash\StudioProjects\MirashChatAttempts\MirashMessengerDemo_QuickBlox\users\src\main\AndroidManifest.xml:12:9-41
 	tools:ignore
@@ -128,16 +128,16 @@ MERGED from [com.google.android.gms:play-services-iid:10.0.1] C:\Users\Mirash\.a
 MERGED from [com.google.android.gms:play-services-base:10.0.1] C:\Users\Mirash\.android\build-cache\9a50ccf5829a23fabe9a2a7ec13476219d224eba\output\AndroidManifest.xml:17:5-42
 MERGED from [com.google.android.gms:play-services-tasks:10.0.1] C:\Users\Mirash\.android\build-cache\09fc506b8615f95d909e2b07894a1ceb2fef8322\output\AndroidManifest.xml:3:5-42
 MERGED from [com.google.android.gms:play-services-basement:10.0.1] C:\Users\Mirash\.android\build-cache\46e33a7e9996585a80aa30ab6a3f67b39388428e\output\AndroidManifest.xml:17:5-42
-MERGED from [com.android.support:design:23.1.1] C:\Users\Mirash\.android\build-cache\1194fa7a58e3066514e1d07dd370129c13109a35\output\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:recyclerview-v7:23.1.1] C:\Users\Mirash\.android\build-cache\c8a3896368748beb4407ee93e1704d0478c6519e\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:design:23.1.1] C:\Users\Mirash\.android\build-cache\2275cf7339603066bb432b1c1d75b9ebdd7820a7\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:recyclerview-v7:23.1.1] C:\Users\Mirash\.android\build-cache\6a6b0de183653f1cc021656056647d90820245ed\output\AndroidManifest.xml:20:5-43
 MERGED from [com.github.johnkil.android-robototextview:robototextview:2.4.3] C:\Users\Mirash\.android\build-cache\29d46e85720512f33ab19ea2fcc8aa92308bad47\output\AndroidManifest.xml:6:5-43
-MERGED from [com.android.support:appcompat-v7:23.1.1] C:\Users\Mirash\.android\build-cache\b8dc71a7970436023081eff4ba84d1fed259e847\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:appcompat-v7:23.1.1] C:\Users\Mirash\.android\build-cache\590c050b1ba9bb064622a321bb18ffa977f46b6d\output\AndroidManifest.xml:20:5-43
 MERGED from [com.github.orangegangsters:swipy:1.2.2] C:\Users\Mirash\.android\build-cache\5349ab1be6bafec23a5d565494c1c0043a0804b0\output\AndroidManifest.xml:7:5-9:41
-MERGED from [com.android.databinding:adapters:1.3.1] C:\Users\Mirash\.android\build-cache\5ee19ec577d5c535a495880bb4d5167067aec3f7\output\AndroidManifest.xml:22:5-24:41
-MERGED from [com.android.databinding:library:1.3.1] C:\Users\Mirash\.android\build-cache\73fe0fc289cab138e9ab32ca8275691da7ca4db1\output\AndroidManifest.xml:22:5-24:41
-MERGED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\d2ed8ea7cf16cf4b6069d96a6cb04d9ce87f9345\output\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.databinding:adapters:1.3.1] C:\Users\Mirash\.android\build-cache\df6d4a9f1208220235bb77a4b75ff62e6c9616d7\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.databinding:library:1.3.1] C:\Users\Mirash\.android\build-cache\14fefee10ae7c0badcb5893332e28d6277e56613\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\59f96ff75b559947429f94fcd358099b7449c799\output\AndroidManifest.xml:21:5-23:54
 	tools:overrideLibrary
-		ADDED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\d2ed8ea7cf16cf4b6069d96a6cb04d9ce87f9345\output\AndroidManifest.xml:23:9-51
+		ADDED from [com.android.support:support-v4:24.0.0] C:\Users\Mirash\.android\build-cache\59f96ff75b559947429f94fcd358099b7449c799\output\AndroidManifest.xml:23:9-51
 	android:targetSdkVersion
 		INJECTED from C:\Users\Mirash\StudioProjects\MirashChatAttempts\MirashMessengerDemo_QuickBlox\users\src\main\AndroidManifest.xml
 		INJECTED from C:\Users\Mirash\StudioProjects\MirashChatAttempts\MirashMessengerDemo_QuickBlox\users\src\main\AndroidManifest.xml

@@ -38,6 +38,8 @@ public class CoreBaseActivity extends AppCompatActivity {
         } catch (Exception ex) {
             // Ignore
         }
+
+        actionBar.setTitle(getClass().getSimpleName());
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +49,7 @@ public class CoreBaseActivity extends AppCompatActivity {
 
     public void setActionBarTitle(int title) {
         if (actionBar != null) {
-            actionBar.setTitle(title);
+            actionBar.setTitle(getClass().getSimpleName());
         }
     }
 

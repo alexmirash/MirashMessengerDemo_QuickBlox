@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    >
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="start"
+        >
+        <FrameLayout
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            >
+            <include layout="@layout/chat_content_main"/>
+        </FrameLayout>
+        <LinearLayout
+            android:id="@+id/chat_drawer_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            >
+            <include layout="@layout/view_chat_drawer_header"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <ListView
+                    android:id="@+id/chat_drawer_list_view"
+                    style="@style/ListViewWithoutDividerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+                <LinearLayout
+                    android:id="@+id/layout_chat_empty"
+                    style="@style/MatchWidth"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:onClick="onStartNewChatClick"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        style="@style/WrapContent"
+                        android:text="@string/chat_empty_you_are_alone_here"
+                        android:textColor="@color/text_color_dark_grey"
+                        android:textSize="20sp"
+                        app:typeface="roboto_medium" />
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        style="@style/WrapContent"
+                        android:text="@string/chat_empty_start_new_chat"
+                        android:textColor="@color/text_color_green"
+                        android:textSize="20sp"
+                        app:typeface="roboto_medium" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>
+

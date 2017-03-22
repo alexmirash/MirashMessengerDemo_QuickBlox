@@ -22,5 +22,4 @@ dependencies {
 
     compile "com.android.support:design:${rootProject.designVersion}"
     compile "com.github.johnkil.android-robototextview:robototextview:${rootProject.robotoTextViewVersion}"
-
 }

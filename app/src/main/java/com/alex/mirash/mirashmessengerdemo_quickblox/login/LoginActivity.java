@@ -5,7 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
-import com.alex.mirash.mirashmessengerdemo_quickblox.base.BaseActivity;
+import com.alex.mirash.mirashmessengerdemo_quickblox.base.BaseUserSessionActivity;
 import com.alex.mirash.mirashmessengerdemo_quickblox.helper.DataHolder;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.ActionProvider;
 import com.alex.mirash.mirashmessengerdemo_quickblox.login.helper.LoginUserDataHolder;
@@ -21,7 +21,7 @@ import com.quickblox.users.model.QBUser;
  * @author Mirash
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseUserSessionActivity {
 
     private SignInView signInView;
     private SignUpView signUpView;
@@ -78,8 +78,10 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(QBUser qbUser, Bundle bundle) {
                 dismissProgressDialog();
+                qbUser.setPassword(userData.getPassword());
                 DataHolder.getInstance().setSignInQbUser(qbUser);
                 Toaster.longToast(R.string.user_successfully_sign_in);
+                loginToChat(qbUser);
             }
 
             @Override
@@ -108,8 +110,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(QBUser qbUser, Bundle bundle) {
                 progressDialog.dismiss();
+                qbUser.setPassword(userData.getPassword());
                 DataHolder.getInstance().addQbUser(qbUser);
                 DataHolder.getInstance().setSignInQbUser(qbUser);
+
+                loginToChat(qbUser);
             }
 
             @Override

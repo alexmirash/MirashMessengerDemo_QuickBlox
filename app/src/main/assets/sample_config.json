@@ -6,6 +6,7 @@
     "auto_join": false,
     "auto_mark_delivered": true,
     "reconnection_allowed": true,
-    "allow_listen_network": true
+    "allow_listen_network": true,
+    "users_password": "qwerty123"
 }
 
