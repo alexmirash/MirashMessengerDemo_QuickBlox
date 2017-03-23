@@ -36,7 +36,7 @@ public class SignUpView extends SignBaseView {
         String password = userData.getPassword();
         String confirm = userData.getConfirmPassword();
 
-        if (TextUtils.isEmpty(login) || TextUtils.isEmpty(userData.getPassword()) || TextUtils.isEmpty(confirm)) {
+        if (TextUtils.isEmpty(login) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirm)) {
             if (TextUtils.isEmpty(login)) {
                 loginEditText.setError(getResources().getString(R.string.error_field_is_empty));
             }

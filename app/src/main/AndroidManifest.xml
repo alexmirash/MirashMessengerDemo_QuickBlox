@@ -36,6 +36,13 @@
             android:label="@string/users"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".chat.activity.SelectUsersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ChatActivityTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+
         <!--chats-->
         <activity
             android:name=".chat.activity.ChatActivity"

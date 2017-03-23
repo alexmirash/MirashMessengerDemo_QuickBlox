@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quickblox.core.exception.QBResponseException;
@@ -84,6 +85,11 @@ public class CoreBaseActivity extends AppCompatActivity {
                 onSnackbarShown(snackbar);
             }
         });
+    }
+
+    protected void showSnackbarError(@StringRes int resId, QBResponseException e, View.OnClickListener clickListener) {
+        View rootLayout = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        showSnackbarError(rootLayout, resId, e, clickListener);
     }
 
     protected void onSnackbarDismiss(Snackbar snackbar, int event) {

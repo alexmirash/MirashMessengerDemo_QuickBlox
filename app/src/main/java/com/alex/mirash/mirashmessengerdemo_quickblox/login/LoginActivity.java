@@ -98,7 +98,7 @@ public class LoginActivity extends BaseUserSessionActivity {
     }
 
     public void signUp(final LoginUserDataHolder userData) {
-        if (signUpView.checkData(userData)) {
+        if (!signUpView.checkData(userData)) {
             return;
         }
         progressDialog.show();

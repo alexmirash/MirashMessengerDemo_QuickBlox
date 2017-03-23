@@ -3,13 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:padding="16dp"
     android:background="#5b33eeee"
+    android:padding="16dp"
     >
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/chat_header_profile_temp_icon"
         android:scaleType="fitStart"
+        android:src="@drawable/chat_header_profile_temp_icon"
         />
+    <ImageButton
+        android:id="@+id/chat_drawer_logout_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_arrow_back"
+        />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|right"
+        android:onClick="selectUsersToChat"
+        android:layout_marginRight="60dp"
+        android:src="@drawable/ic_person_add"
+        />
+
 </FrameLayout>

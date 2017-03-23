@@ -5,31 +5,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.view.ActionMode;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alex.mirash.mirashmessengerdemo_quickblox.R;
 import com.alex.mirash.mirashmessengerdemo_quickblox.base.BaseActivity;
 import com.alex.mirash.mirashmessengerdemo_quickblox.chat.managers.DialogsManager;
+import com.alex.mirash.mirashmessengerdemo_quickblox.chat.tool.DialogsAdapter;
 import com.alex.mirash.mirashmessengerdemo_quickblox.chat.utils.chat.ChatHelper;
 import com.alex.mirash.mirashmessengerdemo_quickblox.chat.utils.qb.QbChatDialogMessageListenerImp;
 import com.alex.mirash.mirashmessengerdemo_quickblox.chat.utils.qb.QbDialogHolder;
 import com.alex.mirash.mirashmessengerdemo_quickblox.chat.utils.qb.callback.QbEntityCallbackImpl;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+import com.alex.mirash.mirashmessengerdemo_quickblox.chat.view.ChatView;
+import com.alex.mirash.mirashmessengerdemo_quickblox.login.LoginActivity;
 import com.quickblox.chat.QBChatService;
 import com.quickblox.chat.QBIncomingMessagesManager;
 import com.quickblox.chat.QBSystemMessagesManager;
@@ -50,26 +48,23 @@ import com.quickblox.users.model.QBUser;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Mirash
  */
 
-public class ChatActivity extends BaseActivity implements DialogsManager.ManagingDialogsCallbacks{
+public class ChatActivity extends BaseActivity implements DialogsManager.ManagingDialogsCallbacks {
     private static final String TAG = "LOL";
-
-    private DrawerLayout drawer;
-
-    private ChatListController chatListController;
-
-
     private static final int REQUEST_SELECT_PEOPLE = 174;
     private static final int REQUEST_DIALOG_ID_FOR_UPDATE = 165;
 
+    private DrawerLayout drawer;
+
     private ActionMode currentActionMode;
+
     private QBRequestGetBuilder requestBuilder;
-    private int skipRecords = 0;
-    private boolean isProcessingResultInProgress;
 
     private BroadcastReceiver pushBroadcastReceiver;
     private GooglePlayServicesHelper googlePlayServicesHelper;
@@ -81,55 +76,87 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
     private DialogsManager dialogsManager;
     private QBUser currentUser;
 
+    private View logOutButton;
+
+    private boolean isProcessingResultInProgress;
+
+
+    private Map<QBChatDialog, ChatView> chatViews = new HashMap<>();
+    private ChatView activeChatView;
+
+    private ViewGroup chatScreenContainer;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        initDrawer();
-
         googlePlayServicesHelper = new GooglePlayServicesHelper();
-
         pushBroadcastReceiver = new PushBroadcastReceiver();
-
         allDialogsMessagesListener = new AllDialogsMessageListener();
         systemMessagesListener = new SystemMessagesListener();
-
         dialogsManager = new DialogsManager();
-
         currentUser = ChatHelper.getCurrentUser();
-
-        initUi();
-
+        requestBuilder = new QBRequestGetBuilder();
         setActionBarTitle(getString(R.string.dialogs_logged_in_as, currentUser.getFullName()));
 
+        initDialogList();
+        initDrawer();
+
         registerQbChatListeners();
-        if (QbDialogHolder.getInstance().getDialogs().size() > 0) {
-            loadDialogsFromQb(true, true);
-        } else {
-            loadDialogsFromQb(false, true);
-        }
+
+        loadDialogsFromQb(QbDialogHolder.getInstance().getDialogs().size() > 0, true);
+
+        logOutButton = findViewById(R.id.chat_drawer_logout_button);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOut();
+            }
+        });
+
+        chatScreenContainer = (ViewGroup) findViewById(R.id.content_container);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         googlePlayServicesHelper.checkPlayServicesAvailable(this);
-
         LocalBroadcastManager.getInstance(this).registerReceiver(pushBroadcastReceiver,
                 new IntentFilter(GcmConsts.ACTION_NEW_GCM_EVENT));
+        for (ChatView chat : chatViews.values()) {
+            chat.onResume();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(pushBroadcastReceiver);
+        for (ChatView chat : chatViews.values()) {
+            chat.onPause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterQbChatListeners();
+        for (ChatView chat : chatViews.values()) {
+            chat.onDestroy();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public ActionMode startSupportActionMode(ActionMode.Callback callback) {
+        currentActionMode = super.startSupportActionMode(callback);
+        return currentActionMode;
     }
 
     private void initDrawer() {
@@ -145,83 +172,33 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
-    private boolean isPrivateDialogExist(ArrayList<QBUser> allSelectedUsers) {
-        ArrayList<QBUser> selectedUsers = new ArrayList<>();
-        selectedUsers.addAll(allSelectedUsers);
-        selectedUsers.remove(ChatHelper.getCurrentUser());
-        return selectedUsers.size() == 1 && QbDialogHolder.getInstance().hasPrivateDialogWithUser(selectedUsers.get(0));
-    }
-
-    private void loadUpdatedDialog(String dialogId) {
-        ChatHelper.getInstance().getDialogById(dialogId, new QbEntityCallbackImpl<QBChatDialog>() {
-            @Override
-            public void onSuccess(QBChatDialog result, Bundle bundle) {
-                isProcessingResultInProgress = false;
-                QbDialogHolder.getInstance().addDialog(result);
-                updateDialogsAdapter();
-            }
-
-            @Override
-            public void onError(QBResponseException e) {
-                isProcessingResultInProgress = false;
-            }
-        });
-    }
-
-    @Override
-    public ActionMode startSupportActionMode(ActionMode.Callback callback) {
-        currentActionMode = super.startSupportActionMode(callback);
-        return currentActionMode;
-    }
-
-    private void userLogout() {
-/*        ChatHelper.getInstance().destroy();
-        SubscribeService.unSubscribeFromPushes(DialogsActivity.this);
+    private void logOut() {
+        ChatHelper.getInstance().destroy();
+        SubscribeService.unSubscribeFromPushes(ChatActivity.this);
         SharedPrefsHelper.getInstance().removeQbUser();
-        LoginActivity.start(DialogsActivity.this);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
         QbDialogHolder.getInstance().clear();
         ProgressDialogFragment.hide(getSupportFragmentManager());
-        finish();*/
+        finish();
     }
 
-    private void updateDialogsList() {
-        requestBuilder.setSkip(skipRecords = 0);
-        loadDialogsFromQb(true, true);
-    }
-
-    private void initUi() {
-        LinearLayout emptyHintLayout = _findViewById(R.id.layout_chat_empty);
-        ListView dialogsListView = _findViewById(R.id.chat_drawer_list_view);
-
-        dialogsAdapter = new DialogsAdapter(this, new ArrayList<>(QbDialogHolder.getInstance().getDialogs().values()));
-
-        TextView listHeader = (TextView) LayoutInflater.from(this)
-                .inflate(R.layout.include_list_hint_header, dialogsListView, false);
-        listHeader.setText(R.string.dialogs_list_hint);
-        dialogsListView.setEmptyView(emptyHintLayout);
-        dialogsListView.addHeaderView(listHeader, null, false);
-
-        dialogsListView.setAdapter(dialogsAdapter);
-
-        dialogsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void initDialogList() {
+        ListView dialogListView = _findViewById(R.id.chat_drawer_list_view);
+        dialogListView.setEmptyView(findViewById(R.id.layout_chat_empty));
+        dialogListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 QBChatDialog selectedDialog = (QBChatDialog) parent.getItemAtPosition(position);
                 if (currentActionMode == null) {
-
-                    //TODO
-//                    ChatActivity.startForResult(DialogsActivity.this, REQUEST_DIALOG_ID_FOR_UPDATE, selectedDialog);
+                    showChatDialogView(selectedDialog);
                 } else {
                     dialogsAdapter.toggleSelection(selectedDialog);
                 }
             }
         });
-        dialogsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        dialogListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 QBChatDialog selectedDialog = (QBChatDialog) parent.getItemAtPosition(position);
@@ -230,7 +207,32 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
                 return true;
             }
         });
-        requestBuilder = new QBRequestGetBuilder();
+        dialogsAdapter = new DialogsAdapter(this, new ArrayList<>(QbDialogHolder.getInstance().getDialogs().values()));
+        dialogListView.setAdapter(dialogsAdapter);
+    }
+
+    public void selectUsersToChat(View view) {
+        SelectUsersActivity.startForResult(this, REQUEST_SELECT_PEOPLE);
+    }
+
+    private void showChatDialogView(QBChatDialog chatDialog) {
+        //TODO
+        //ChatActivity.startForResult(DialogsActivity.this, REQUEST_DIALOG_ID_FOR_UPDATE, selectedDialog);
+        loadUpdatedDialog(chatDialog.getDialogId());
+        if (activeChatView != null) {
+            activeChatView.hide();
+        }
+        activeChatView = chatViews.get(chatDialog);
+        if (activeChatView == null) {
+            activeChatView = new ChatView(this);
+            activeChatView.setVisibility(View.INVISIBLE);
+            chatViews.put(chatDialog, activeChatView);
+            chatScreenContainer.addView(activeChatView, new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            activeChatView.show(chatDialog);
+        } else {
+            activeChatView.show(chatDialog);
+        }
     }
 
     private void registerQbChatListeners() {
@@ -262,26 +264,6 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
         dialogsManager.removeManagingDialogsCallbackListener(this);
     }
 
-    private void createDialog(final ArrayList<QBUser> selectedUsers) {
-        ChatHelper.getInstance().createDialogWithSelectedUsers(selectedUsers,
-                new QBEntityCallback<QBChatDialog>() {
-                    @Override
-                    public void onSuccess(QBChatDialog dialog, Bundle args) {
-                        isProcessingResultInProgress = false;
-                        dialogsManager.sendSystemMessageAboutCreatingDialog(systemMessagesManager, dialog);
-//                        ChatActivity.startForResult(DialogsActivity.this, REQUEST_DIALOG_ID_FOR_UPDATE, dialog);
-                        ProgressDialogFragment.hide(getSupportFragmentManager());
-                    }
-
-                    @Override
-                    public void onError(QBResponseException e) {
-                        isProcessingResultInProgress = false;
-                        ProgressDialogFragment.hide(getSupportFragmentManager());
-                    }
-                }
-        );
-    }
-
     private void loadDialogsFromQb(final boolean silentUpdate, final boolean clearDialogHolder) {
         isProcessingResultInProgress = true;
         if (!silentUpdate) {
@@ -293,6 +275,7 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
             public void onSuccess(ArrayList<QBChatDialog> dialogs, Bundle bundle) {
                 isProcessingResultInProgress = false;
                 dismissProgressDialog();
+
                 if (clearDialogHolder) {
                     QbDialogHolder.getInstance().clear();
                 }
@@ -327,6 +310,86 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
     public void onNewDialogLoaded(QBChatDialog chatDialog) {
         updateDialogsAdapter();
     }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            isProcessingResultInProgress = true;
+            if (requestCode == REQUEST_SELECT_PEOPLE) {
+                ArrayList<QBUser> selectedUsers = (ArrayList<QBUser>) data
+                        .getSerializableExtra(SelectUsersActivity.EXTRA_QB_USERS);
+                if (isPrivateDialogExist(selectedUsers)) {
+                    selectedUsers.remove(ChatHelper.getCurrentUser());
+                    QBChatDialog existingPrivateDialog = QbDialogHolder.getInstance().getPrivateDialogWithUser(selectedUsers.get(0));
+                    isProcessingResultInProgress = false;
+                    showChatDialogView(existingPrivateDialog);
+                } else {
+                    ProgressDialogFragment.show(getSupportFragmentManager(), R.string.create_chat);
+                    createDialog(selectedUsers);
+                }
+            } else if (requestCode == REQUEST_DIALOG_ID_FOR_UPDATE) {
+                //TODO
+//                if (data != null) {
+//                    String dialogId = data.getStringExtra(ChatActivity.EXTRA_DIALOG_ID);
+//                    loadUpdatedDialog(dialogId);
+//                } else {
+//                    isProcessingResultInProgress = false;
+//                    updateDialogsList();
+//                }
+            }
+        } else {
+            updateDialogsAdapter();
+        }
+    }
+
+    private void loadUpdatedDialog(String dialogId) {
+        ChatHelper.getInstance().getDialogById(dialogId, new QbEntityCallbackImpl<QBChatDialog>() {
+            @Override
+            public void onSuccess(QBChatDialog result, Bundle bundle) {
+                isProcessingResultInProgress = false;
+                QbDialogHolder.getInstance().addDialog(result);
+                updateDialogsAdapter();
+            }
+
+            @Override
+            public void onError(QBResponseException e) {
+                isProcessingResultInProgress = false;
+            }
+        });
+    }
+
+    private void createDialog(final ArrayList<QBUser> selectedUsers) {
+        ChatHelper.getInstance().createDialogWithSelectedUsers(selectedUsers,
+                new QBEntityCallback<QBChatDialog>() {
+                    @Override
+                    public void onSuccess(QBChatDialog dialog, Bundle args) {
+                        isProcessingResultInProgress = false;
+                        dialogsManager.sendSystemMessageAboutCreatingDialog(systemMessagesManager, dialog);
+                        showChatDialogView(dialog);
+
+                        ProgressDialogFragment.hide(getSupportFragmentManager());
+                    }
+
+                    @Override
+                    public void onError(QBResponseException e) {
+                        isProcessingResultInProgress = false;
+                        ProgressDialogFragment.hide(getSupportFragmentManager());
+                        showSnackbarError(R.string.dialogs_creation_error, null, null);
+                    }
+                }
+        );
+    }
+
+    private boolean isPrivateDialogExist(ArrayList<QBUser> allSelectedUsers) {
+        ArrayList<QBUser> selectedUsers = new ArrayList<>();
+        selectedUsers.addAll(allSelectedUsers);
+        selectedUsers.remove(ChatHelper.getCurrentUser());
+        return selectedUsers.size() == 1 && QbDialogHolder.getInstance().hasPrivateDialogWithUser(selectedUsers.get(0));
+    }
+
 
     private class DeleteActionModeCallback implements ActionMode.Callback {
 
@@ -376,8 +439,6 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
 
                 @Override
                 public void onError(QBResponseException e) {
-
-                    //TODO
                 }
             });
         }
@@ -389,7 +450,7 @@ public class ChatActivity extends BaseActivity implements DialogsManager.Managin
             // Get extra data included in the Intent
             String message = intent.getStringExtra(GcmConsts.EXTRA_GCM_MESSAGE);
             Log.v(TAG, "Received broadcast " + intent.getAction() + " with data: " + message);
-            requestBuilder.setSkip(skipRecords = 0);
+            requestBuilder.setSkip(0);
             loadDialogsFromQb(true, true);
         }
     }

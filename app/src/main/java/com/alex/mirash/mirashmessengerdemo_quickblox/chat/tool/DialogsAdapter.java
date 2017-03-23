@@ -1,4 +1,4 @@
-package com.alex.mirash.mirashmessengerdemo_quickblox.chat.activity;
+package com.alex.mirash.mirashmessengerdemo_quickblox.chat.tool;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -45,10 +45,10 @@ public class DialogsAdapter extends BaseSelectableListAdapter<QBChatDialog> {
 
         QBChatDialog dialog = getItem(position);
         if (dialog.getType().equals(QBDialogType.GROUP)) {
-            holder.dialogImageView.setBackgroundDrawable(UiUtils.getGreyCircleDrawable());
+            holder.dialogImageView.setBackground(UiUtils.getGreyCircleDrawable());
             holder.dialogImageView.setImageResource(R.drawable.ic_chat_group);
         } else {
-            holder.dialogImageView.setBackgroundDrawable(UiUtils.getColorCircleDrawable(position));
+            holder.dialogImageView.setBackground(UiUtils.getColorCircleDrawable(position));
             holder.dialogImageView.setImageDrawable(null);
         }
 
